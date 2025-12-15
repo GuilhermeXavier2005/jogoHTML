@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Flappy FEI</title>
+    <link rel="stylesheet" href="estiloMenu.css">
+</head>
+<body>
+    <header>
+    </header>
+
+    <main>
+        <section id="about-game">
+            <h2>Menu principal</h2>
+        
+        <div class="play-button-container">
+            <button class="play-button">Play ▶</button>
+            <a href="../SobreJogo/paginas/desenvolvedores.html" class="play-button">Desenvolvedores</a>
+            <a href="../SobreJogo/paginas/principal.html" class="play-button">Sobre o jogo</a>
+        </div>
+
+        <div class="botoes-menu">
+            VOLUME DA MÚSICA
+            <input type="range" min="0" max="100" value="50" class="botao-deslizante">
+            <button class="botao">DIFICULDADE</button>
+            <button class="botao">CRÉDITOS</button>
+
+        </div>
+    </main>
+</body>
+<script type="module">
+    var volume = 0.5
+        document.getElementsByClassName("botao")[1].addEventListener('click', ()=>{
+            alert("essa opção está sendo desenvolvida")
+        }) 
+        document.getElementsByClassName("botao")[0].addEventListener('click', ()=>{
+            alert("essa opção está sendo desenvolvida")
+        }) 
+
+        document.getElementsByClassName("play-button")[0].addEventListener('click',()=>{
+            volume = document.getElementsByClassName("botao-deslizante")[0].value/100
+            window.location.href = `Apresentacao.html?dados=${encodeURIComponent(volume)}`
+            console.log(volume)
+        })
+
+    </script>
+</html>
