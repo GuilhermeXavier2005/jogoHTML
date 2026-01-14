@@ -92,9 +92,6 @@ Nenhuma dependência externa é necessária.
 - Dificuldade progressiva
 - Opção com dois jogadores
 - Melhorar estilos das páginas
-- Correção de bugs ao trocar aba durante funcionamento do jogo
-- Correção de Funções com chamadas duplas
-- Correção de atraso de chamada de funções
 
 ---
 
