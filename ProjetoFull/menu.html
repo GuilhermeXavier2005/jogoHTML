@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Flappy FEI</title>
+    <link rel="stylesheet" href="estiloMenu.css">
+</head>
+<body>
+    <header>
+    </header>
+
+    <main>
+        <section id="about-game">
+            <h2>Menu principal</h2>
+        
+        <div class="play-button-container">
+            <button class="play-button">PLAY ▶</button>
+            <button class="play-button">DOIS JOGADORES</button>
+            <a href="../SobreJogo/paginas/desenvolvedores.html" class="play-button">DESENVOLVEDORES</a>
+            <a href="../SobreJogo/paginas/principal.html" class="play-button">SOBRE O JOGO</a>
+        </div>
+
+        <div class="botoes-menu">
+            VOLUME DOS EFEITOS
+            <input type="range" min="0" max="100" value="50" class="botao-deslizante">
+            <a href="selecFases.html" class="botao">FASES</a>
+            <a href="creditos.html" class="botao">CRÉDITOS</a>
+
+        </div>
+    </main>
+</body>
+<script type="module">
+    const pauseAudio = new Audio('audio/pause_audio.mp3')
+    var volume = 0.5
+    let segundos = 4
+    var botaoPlay = document.getElementsByClassName("play-button")[0]
+    var doisJogadorePlay = document.getElementsByClassName("play-button")[1]
+
+        botaoPlay.addEventListener('click',()=>{
+            pauseAudio.play()
+            setInterval(()=>{
+                segundos==0?window.location.href = `FASE1.html?dados=${encodeURIComponent(volume)}`:segundos--
+                botaoPlay.innerText = segundos
+            },1000)
+            
+            volume = document.getElementsByClassName("botao-deslizante")[0].value/100
+            clearInterval()
+        })
+        doisJogadorePlay.addEventListener('click',()=>{
+            pauseAudio.play()
+            setInterval(()=>{
+                segundos==0?window.location.href = 'coop/coop.html':segundos--
+                doisJogadorePlay.innerText = segundos
+            },1000)
+            
+            volume = document.getElementsByClassName("botao-deslizante")[0].value/100
+            clearInterval()
+        })
+
+    </script>
+</html>

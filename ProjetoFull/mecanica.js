@@ -3,16 +3,22 @@ let c = canvado.getContext('2d')
 let seconds = 0
 let minutes = 0
 const derrota = new Audio('audio/audio_hit.wav')
+derrota.volume = 0.3
 let backgroundMusic = new Audio("audio/background.wav")
-let animation
+backgroundMusic.volume = 0.3
+let fase1, fase2, fase3
 const bossFight = new Audio('audio/boss.wav')
+bossFight.volume = 0.2
 const sonicJ = new Audio('audio/sonicpulo.wav')
+sonicJ.volume = 0.2
 let sonic
+var audio =  new Audio('audio/audio_wing.wav')
+let recebaPoder = new Audio('audio/powerup.wav')
 
 
 //escreve fim de jogo
 function escreve(){
-    clearInterval(dificuldade)
+    //clearInterval(dificuldade)
     clearTimeout(mudanca)
     canvado.style.backgroundImage = 'none'
     canvado.style.backgroundColor = 'black'
@@ -35,18 +41,42 @@ const musica = setTimeout(()=>{
                 },2000)
 
 //contador de tempo
-const tempo = setInterval(()=>{
+let tempo
+function cronometro(){
+    clearInterval(tempo)
+    tempo = setInterval(()=>{
         seconds++
-        seconds >= 10?seconds: seconds = `0${seconds}`
-        document.querySelector("#seconds").innerHTML = seconds
+        let displayTempo
+        displayTempo = seconds < 10?`0${seconds}`: seconds
+        document.querySelector("#seconds").innerHTML = displayTempo
         if(seconds==60){
             seconds = 0
             minutes++
             minutes >= 10?minutes: minutes = `0${minutes}`
             document.querySelector("#minutes").innerHTML = minutes
         }
+    if(passaro.vida <= 50){
+        alerta()
+    }
     },1000)
+}
+cronometro()
 
+
+function alterarFase(){
+    cancelAnimationFrame(sonicPular)
+    cancelAnimationFrame(fase2)
+    cancelAnimationFrame(Luta)
+
+    c.clearRect(0,0,600,600)
+    passaro.desenha()
+    passaro.frames()
+    caixa.desenha()
+    caixa.mexe()
+    window.location.href = "FASE2.html"
+
+    fase3 = requestAnimationFrame(alterarFase)
+}
 
 //finaliza o jogo
 function endgame(){
@@ -55,7 +85,7 @@ function endgame(){
     if(passaro.vida <=0){
         passaro.pulo = 0
         cancelAnimationFrame(sonic)
-        cancelAnimationFrame(animation)
+        cancelAnimationFrame(fase1)
         clearTimeout(mudanca)
         clearInterval(Luta)
         clearInterval(tempo)
@@ -65,6 +95,13 @@ function endgame(){
         derrota.play()
         escreve()
     }
+}
+
+//indica se a vida do jogador está crítica
+function alerta(){
+    const alertaVida = new Audio('audio/closeDeath.mp3')
+    alertaVida.volume = 0.3
+    passaro.vida>50??alertaVida.pause();alertaVida.play()
 }
 
 //animação de bater asas passaro
@@ -186,9 +223,9 @@ let chefe = {
     vetorY: -150,
     gravidade: 0.05,
     velocidade:0,
-    pulo: 0.3,
-    condicao:5,
-    agressividade:0,
+    pulo: 1, //variação do pulo do sonic
+    condicao:0.001,
+    agressividade:2,
     fundo: 'imagens/sonic_middle.png',
     img: new Image(),
     desenha: function(){
@@ -219,8 +256,8 @@ let chefe = {
     },
     
     pula: function(){
-        mudaPulo = {
-            pulo1 : setInterval(()=>{
+         mudaPulo = {
+           pulo1 : setInterval(()=>{
                 if(chefe.vetorY < 310  ){
                     chefe.fundo = 'imagens/jump2.png'
                     clearInterval(this.pulo1)
@@ -230,36 +267,22 @@ let chefe = {
                     if(chefe.vetorY < 310  ){
                         chefe.fundo = 'imagens/jump3.png'
                         clearInterval(this.pulo2)
-                    }},250),
+                    }},55),
         
             pulo3 : setInterval(()=>{
                 if(chefe.vetorY < 310  ){
                     chefe.fundo = 'imagens/jump1.png'
                     clearInterval(this.pulo3)
-                }},500)
+                }},60)
+
+                
         }
 
         this.img.src = this.fundo
-        this.vetorY += chefe.gravidade + chefe.velocidade
         this.velocidade = - chefe.pulo
     }
 }
 
-//grau de dificuldade
-const  dificuldade =  setInterval(()=>{
-    if(passaro.x_mouse != undefined){
-        if( cano.velocidade < 5){
-            cano.velocidade += 0.5
-            cano2.velocidade2 += 0.5
-            passaro.gravidade += 0.005
-            passaro.pulo += 0.05
-            caixa.velocidade += 0.5
-            chefe.pulo += 0.07
-            chefe.agressividade += 2
-        }
-    }
-    mudaCenario()
-},3000)
 
 //objetos de chefe
 let red_cano = {
@@ -293,11 +316,27 @@ let red_cano2 = {
 //jogabilidade
 document.addEventListener('click', ()=>{
     passaro.pula()
-    var audio =  new Audio('audio/audio_wing.wav')
     audio.play()
 })
 
 loops()
+
+function captarVolume(){
+    const parametroModo = new URLSearchParams(window.location.search)
+    const volumedados = parametroModo.get("dados")
+    volumeEfeitos(volumedados)
+}
+
+function volumeEfeitos(volumeModos){
+    audio.volume = volumeModos 
+    recebaPoder.volume = volumeModos
+    sonicJ.volume = volumeModos
+    derrota.volume = volumeModos 
+    backgroundMusic.volume = volumeModos
+    bossFight.volume = volumeModos 
+}
+
+captarVolume()
 
 //jpgabilidade horizontal
 document.addEventListener('mousemove',function(evento){
@@ -312,46 +351,55 @@ document.addEventListener('mousemove',function(evento){
     }
 })
 
+function sprites(){
+    passaro.desenha()
+    passaro.frames()
+    cano.printa()
+    cano2.printa()
+    cano.movimento()
+    cano2.movimento()
+    caixa.desenha()
+    caixa.mexe()
+    red_cano.printa()
+    red_cano2.printa()
+}
+
 function loops(){
-        c.clearRect(0,0,600,600)
-        passaro.desenha()
-        passaro.frames()
-        cano.printa()
-        cano2.printa()
-        cano.movimento()
-        cano2.movimento()
-        caixa.desenha()
-        caixa.mexe()
-        red_cano.printa()
-        red_cano2.printa()
-        animation  = requestAnimationFrame(loops)
+    c.clearRect(0,0,600,600)
+    sprites()
+    fase1  = requestAnimationFrame(loops)
 }
 
 
 //luta contra chefe
-const mudanca = setTimeout(function chefao(){
-        cancelAnimationFrame(animation)
-        clearInterval(dificuldade)
+let mudanca
+function alteracaoCenario(){
+   mudanca = setInterval(function chefao(){
+        chefeFinal()
+    },20000)
+}
+
+function chefeFinal(){
+
+        cancelAnimationFrame(fase1)
+        clearInterval(mudanca)
         c.clearRect(0,0,600,600)
         canvado.style.backgroundImage = 'none'
-        passaro.desenha()
-        passaro.frames()
-        cano.printa()
-        cano2.printa()
-        cano.movimento()
-        cano2.movimento()
-        caixa.desenha()
-        caixa.mexe()
-        red_cano.printa()
-        red_cano2.printa()
-        chefe.desenha() 
-        chefe.frames()
-        animation = requestAnimationFrame(chefao)
         document.body.style.backgroundColor = 'black'
-        canvado.style.backgroundColor = 'red'
+        canvado.style.backgroundColor = 'blue'
+        sprites()
+        chefe.frames()
+        chefe.desenha()
+        
         backgroundMusic.pause()
         bossFight.play()
-    },20000)
+        if(minutes >= 1 && seconds>=10){
+            alterarFase()
+        }
+        fase2 = requestAnimationFrame(chefeFinal)
+        
+}
+alteracaoCenario()
 
 //verifica condicoes de derrota jogador
 function animacao() {
@@ -371,7 +419,7 @@ function animacao() {
         passaro.vetorY + passaro.altura > cano.Y && 
         passaro.vetorY < cano.Y + cano.largura  
     ) {
-        endgame();
+       endgame();
     }
     if (
         passaro.x_mouse + passaro.largura > cano2.X &&   
@@ -406,7 +454,7 @@ function animacao() {
              } 
             }
         poderes()
-        caixa.fundoCaixa = 'imagens/tijolo.png'
+        caixa.fundoCaixa = 'imagens/block.png'
 
     }
 
@@ -470,7 +518,7 @@ function animacao() {
 }
 //poderes de vida
 function poderes(){
-    if(caixa.fundoCaixa != 'imagens/tijolo.png'){
+    if(caixa.fundoCaixa != 'imagens/block.png'){
         let podale = Math.floor(Math.random()*1)+1
         switch (podale){
             case 1:
@@ -482,7 +530,7 @@ function poderes(){
             default:
                 console.log('azar') 
         }
-    let recebaPoder = new Audio('audio/powerup.wav')
+
     recebaPoder.play()
     }  
 }
@@ -518,9 +566,23 @@ function mudaCenario(){
 }
 
 //chefe agressividade
-const Luta = setInterval(()=>{
-    seconds%3==0&&seconds>20?sonicPular():seconds
-},1000)
+let Luta
+function combate(){
+    Luta = setInterval(()=>{
+        if( cano.velocidade < 5){
+            cano.velocidade += 0.5
+            cano2.velocidade2 += 0.5
+            passaro.gravidade += 0.005
+            passaro.pulo += 0.05
+            caixa.velocidade += 0.5
+            chefe.pulo += 0.07
+            chefe.agressividade += 2
+        }
+
+        seconds>20?sonicPular():seconds
+    },3000)
+}
+
 
 function sonicPular(){
     chefe.vetorX += chefe.condicao
@@ -529,5 +591,23 @@ function sonicPular(){
     chefe.pula()
 }
 
+combate()
+
+document.addEventListener("DOMContentLoaded", function(){
+	document.addEventListener("visibilitychange", function() {
+	  if( document.visibilityState == 'hidden'){
+	  	history.back()
+	  }
+	});
+});
+
 //perdeu né, reinicia ai
 document.querySelector("#reiniciar").addEventListener('click', ()=>{window.location.reload()})
+
+document.addEventListener("keydown", function(evento){
+    if(evento.key == "Enter"){
+
+        window.location.reload()
+    }
+})
+
