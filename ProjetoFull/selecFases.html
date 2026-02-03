@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Flappy FEI</title>
+    <link rel="stylesheet" href="estiloMenu.css">
+</head>
+<body>
+    <header>
+    </header>
+
+    <nav class="nav-menu">
+        <a href="../SobreJogo/paginas/principal.html">sobre o jogo</a>
+        <a href="../SobreJogo/paginas/pag_jogo.html">Jogo</a>
+        <a href="menu.html">Menu principal</a>
+    </nav>
+
+    <main>
+        <section id="about-game">
+            <h2>Fases</h2>
+            <div id="imagens">
+                <a href="FASE1.html" id="link1"><img id="fase1" src="audio/fase1.png"></a>
+                <a href="FASE2.html" id="link2"><img id="fase2" src="audio/fase2.png"></a> 
+            </div>
+            
+        
+    </main>
+</body>
+<script type="module">
+    const pauseAudio = new Audio('audio/pause_audio.mp3')
+    const audioFase = new Audio('audio/interacao2.mp3')
+    var volume = 0.5
+    let segundos = 4
+    var botaoPlay = document.getElementsByClassName("play-button")[0]
+    let fase1 = document.querySelector("#link1")
+    let fase2 = document.querySelector("#link2")
+
+    fase1.addEventListener('mouseover', ()=>{
+        audioFase.play()
+    })
+    fase1.addEventListener('mouseout', ()=>{
+        audioFase.pause()
+        audioFase.currentTime = 0
+    })
+
+    fase2.addEventListener('mousemove', ()=>{
+        audioFase.play()
+        audioFase.currentTime = 0
+    })
+    fase2.addEventListener('mouseout', ()=>{
+        audioFase.pause()
+        audioFase.currentTime = 0
+    })
+
+        document.getElementsByClassName("botao")[0].addEventListener('click', ()=>{
+            alert("essa opção está sendo desenvolvida")
+        }) 
+
+        botaoPlay.addEventListener('click',()=>{
+            pauseAudio.play()
+            setInterval(()=>{
+                segundos==0?window.location.href = `FASE1.html?dados=${encodeURIComponent(volume)}`:segundos--
+                botaoPlay.innerText = segundos
+            },1000)
+            
+            volume = document.getElementsByClassName("botao-deslizante")[0].value/100
+            clearInterval()
+        })
+
+    </script>
+</html>
