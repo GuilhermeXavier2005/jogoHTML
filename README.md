@@ -26,7 +26,7 @@ O objetivo do Flappy FEI é manter o personagem em voo pelo maior tempo possíve
 
 ---
 
-![Screenshot](ProjetoFull/audio/TelaJogo3.png)
+![Screenshot](audio/TelaJogo3.png)
 
 ## tecnologias
 
