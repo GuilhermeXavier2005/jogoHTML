@@ -11,6 +11,8 @@
 </p>
 
 ## sobre
+![Screenshot](ProjetoFull/audio/fase1.png)
+![Screenshot](ProjetoFull/audio/fase2.png)
 
 **Flappy FEI** é um jogo casual desenvolvido para navegadores web, inspirado na mecânica clássica do *Flappy Bird*. O jogador controla um pássaro que deve atravessar canos industriais sequenciais, exigindo precisão, reflexos rápidos e concentração para sobreviver o maior tempo possível.
 
@@ -20,9 +22,11 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e aprendizado pr
 
 ## objetivo
 
-O objetivo do Flappy FEI é manter o personagem em voo pelo maior tempo possível, desviando dos obstáculos ao longo do cenário. A cada obstáculo superado, é adicionado uma dificuldade para dinamizar a experiência. O jogo termina quando a quantidade de vida do personagem é esgotada, ocorrendo em encostar nos obstáculos, outros personagens ou limites do mapa.
+O objetivo do Flappy FEI é manter o personagem em voo pelo maior tempo possível, desviando dos obstáculos ao longo do cenário. A cada obstáculo superado, é adicionado uma dificuldade para dinamizar a experiência. O jogo termina quando a quantidade de vida do personagem é esgotada, ocorrendo em encostar nos obstáculos, outros personagens ou limites do mapa. O jogo também apresenta opção para dois jogadores, semelhante ao modo comum do jogo inspiração flappy bird, sem movimentações usando o movimento do mouse
 
 ---
+
+![Screenshot](ProjetoFull/audio/TelaJogo3.png)
 
 ## tecnologias
 
@@ -59,8 +63,8 @@ O objetivo do Flappy FEI é manter o personagem em voo pelo maior tempo possíve
 ## Controles
 
 - Clique do Mouse: faz o personagem subir
-- Pressionar Enter faz o jogo pausar
-- O botão F reinicia a página e consequentemente o jogo
+- Pressionar Enter faz a fase reiniciar
+- Arrastar o mouse para esquerda e direita movimenta o personagem
 
 ---
 
@@ -79,19 +83,14 @@ Nenhuma dependência externa é necessária.
 - Detecção de colisão
 - Animação contínua
 - Opções com volume do som
+- Opções de fases
 - Alterações do cenário
 - Chefes durante a progresão
 - Músicas de jogos Retro
-
----
-
-## futuro
-
-- Sistema de recordes
-- Mais sons e efeitos
+- Outros corpos(fases) em HTMLs
 - Dificuldade progressiva
-- Opção com dois jogadores
-- Melhorar estilos das páginas
+- Mais de um recurso de gameplay
+- Opção de dois jogadores
 
 ---
 
