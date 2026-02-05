@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #87CEEB, #b0e0e6);
+    color: #333;
+}
+
+header {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    margin: 0;
+    color: #444;
+}
+
+main {
+    max-width: 450px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#game-container, #embedded-game {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #444;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    text-align: left;
+}
+
+.play-button-container, .botoes-menu {
+    display:flex;
+    justify-items: center;
+    text-align: center;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left:80px;
+    width:300px;
+}
+
+.play-button, .botao {
+    padding: 12px 25px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.play-button:hover, .botao:hover {
+    background-color: #45a049;
+}
+
+.nav-menu {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #4CAF50;
+}
+
+#imagens{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px inset rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+#link1, #link2, #link3{
+    display: flex;
+    justify-content: center;
+    height: 175px;
+    width: 100%;
+}
+
+
+#fase1, #fase2, #fase3{
+    margin: 2%;
+    border: 7px inset lightblue;
+    border-radius: 10px;
+    width: 200px;
+}
+
+#fase1:hover, #fase2:hover, #fase3:hover{
+    border: 15px inset rgb(87, 108, 116);
+    border-radius: 1px;
+}

@@ -1,5 +1,12 @@
 let canvado = document.getElementById("jogo")
+var audio =  new Audio('../audio/audio_wing.wav')
+var audio2 =  new Audio('../audio/audio_wing.wav')
 let c = canvado.getContext('2d')
+const derrota = new Audio('../audio/audio_hit.wav')
+const sonicJ = new Audio('../audio/sonicpulo.wav')
+document.body.style.backgroundColor = 'grey'
+canvado.style.backgroundImage = 'url(../imagens/scrapbrainzone.jpg)'
+canvado.style.backgroundRepeat = "no-repeat"
 let seconds = 0
 let minutes = 0
 let animation
@@ -138,7 +145,7 @@ let chefe = {
     velocidade:0,
     pulo: 6,
     condicao:5,
-    fundo: '../imagens/mario.png',
+    fundo: '../imagens/sonic_middle.png',
     img: new Image(),
     desenha: function(){
         this.img.src = this.fundo
@@ -155,40 +162,42 @@ let chefe = {
         if(chefe.vetorY < -5){
             chefe.vetorY = -5
         }
-        if(chefe.vetorX+10 >= 540){
+        if(chefe.vetorX+10 >= 550){
             this.condicao = -5
             cancelAnimationFrame(sonic)
-            chefe.fundo = '../imagens/mario2.png'
+            chefe.fundo = '../imagens/sonic_middle2.png'
         }
         if(chefe.vetorX <= 3){
             this.condicao = 5
             cancelAnimationFrame(sonic)
-            chefe.fundo = '../imagens/mario.png'
+            chefe.fundo = '../imagens/sonic_middle.png'
         }
     },
     
-   pula: function(){
-         mudaPulo = {
+    pula: function(){
+        mudaPulo = {
             pulo1 : setInterval(()=>{
-                    chefe.fundo = '../imagens/marioR1.png'
+                if(chefe.vetorY < 310  ){
+                    chefe.fundo = '../imagens/jump2.png'
                     clearInterval(this.pulo1)
-                },1000),
+                }},50),
         
-            /*pulo2 : setInterval(()=>{
-                        chefe.fundo = '../imagens/marioR2.png'
+            pulo2 : setInterval(()=>{
+                    if(chefe.vetorY < 310  ){
+                        chefe.fundo = '../imagens/jump3.png'
                         clearInterval(this.pulo2)
-                    },3500),
+                    }},250),
         
             pulo3 : setInterval(()=>{
-                    chefe.fundo = '../imagens/marioR4.png'
+                if(chefe.vetorY < 310  ){
+                    chefe.fundo = '../imagens/jump1.png'
                     clearInterval(this.pulo3)
-                },7500)*/
+                }},500)
         }
-        /*this.fundo = '../imagens/marioJ.png'
 
         this.img.src = this.fundo
         this.vetorY += chefe.gravidade + chefe.velocidade
-        this.velocidade = - chefe.pulo*/
+        this.velocidade = - chefe.pulo
     }
 }
 
@@ -222,7 +231,6 @@ let red_cano2 = {
 
 document.addEventListener('click', ()=>{
     passaro.pula()
-    var audio =  new Audio('../audio/audio_wing.wav')
     audio.play()
 })
 
@@ -240,11 +248,51 @@ const  dificuldade =  setInterval(()=>{
 sonicPular()
 },12000)
 
+//contador de tempo
+let tempo
+function cronometro(){
+    clearInterval(tempo)
+    tempo = setInterval(()=>{
+        seconds++
+        let displayTempo
+        displayTempo = seconds < 10?`0${seconds}`: seconds
+        document.querySelector("#seconds").innerHTML = displayTempo
+        if(seconds==60){
+            seconds = 0
+            minutes++
+            minutes >= 10?minutes: minutes = `0${minutes}`
+            document.querySelector("#minutes").innerHTML = minutes
+        }
+    if(passaro.vida <= 50){
+        alerta()
+    }
+    },1000)
+}
+cronometro()
+
+//escreve fim de jogo
+function escreve(){
+    canvado.style.backgroundImage = 'none'
+    canvado.style.backgroundColor = 'black'
+    c.beginPath()
+    c.lineWidth = 2;
+    c.fillStyle = 'white';
+    c.strokeStyle = 'white';
+    c.font = "45px Arial"
+    c.textAlign = "center";
+    c.fillText("Game Over",300,300);
+    c.strokeText("Game Over",300,300)
+    c.closePath()
+    return False
+}
+
 function endgame(){
-//passaro.vida -= 7
+passaro.vida -= 1
 document.querySelector('#info').innerHTML = passaro.vida
 if(passaro.vida <=0){
     clearInterval(tempo)
+    derrota.play()
+    escreve()
     return False
 }
 }
@@ -265,19 +313,6 @@ passaro2.fundo = '../imagens/redbird-upflap.png'
 },1500)
 
 loops()
-
-/*document.addEventListener('mousemove',function(evento){
-    let rect = canvado.getBoundingClientRect();
-    passaro.x_mouse = evento.clientX - rect.left;
-
-    if(passaro.x_mouse > 560){
-        passaro.x_mouse = 560
-    }
-    if(passaro.x_mouse < 1){
-        passaro.x_mouse = 1
-    }
-})*/
-
 
 
 function loops(){
@@ -300,16 +335,16 @@ setTimeout(function chefao(){
     //clearInterval(dificuldade)
     c.clearRect(0,0,600,600)
     canvado.style.backgroundImage = 'none'
-    //cano.printa()
-    //cano2.printa()
-    //cano.movimento()
-    //cano2.movimento()
+    cano.printa()
+    cano2.printa()
+    cano.movimento()
+    cano2.movimento()
     passaro.desenha()
     passaro.frames()
     passaro2.desenha()
     passaro2.frames()
-   // red_cano.printa()
-    //red_cano2.printa()
+    red_cano.printa()
+    red_cano2.printa()
     chefe.desenha() 
     chefe.frames()
     animation = requestAnimationFrame(chefao)
@@ -317,13 +352,7 @@ setTimeout(function chefao(){
     canvado.style.backgroundColor = 'blue'
     //backgroundMusic.pause()
     //bossFight.play()
-},3000)
-
-setTimeout(()=>{
-    setInterval(()=>{
-        chefe.pula()
-    },1000)
-},12000)
+},10000)
 
 //parte do Henriqueee
 function animacao() {
@@ -338,23 +367,50 @@ function animacao() {
     }
     //colisão com o cano(lá ele)
     if (
-        passaro.x_mouse + passaro.largura > cano.X &&   
-        passaro.x_mouse < cano.X + cano.altura &&       
+        passaro.vetorX + passaro.largura > cano.X &&   
+        passaro.vetorX < cano.X + cano.altura &&       
         passaro.vetorY + passaro.altura > cano.Y && 
         passaro.vetorY < cano.Y + cano.largura  
     ) {
         endgame();
     }
     if (
-        passaro.x_mouse + passaro.largura > cano2.X &&   
-        passaro.x_mouse < cano2.X + cano2.altura &&       
+        passaro.vetorX + passaro.largura > cano2.X &&   
+        passaro.vetorX < cano2.X + cano2.altura &&       
         passaro.vetorY + passaro.altura > cano2.Y && 
         passaro.vetorY < cano2.Y + cano2.largura  
     ) {
         endgame();
     }
+
+    //passaro2 colisão com cano
+    if (passaro2.vetorY > 800) {
+        passaro2.vetorY = 800;
+        endgame();
+    }
+    //Limite superior
+    if (passaro2.vetorY < -60) {
+        passaro2.vetorY = -60;
+    }
+    //colisão com o cano(lá ele)
+    if (
+        passaro2.vetorX + passaro2.largura > cano.X &&   
+        passaro2.vetorX < cano.X + cano.altura &&       
+        passaro2.vetorY + passaro2.altura > cano.Y && 
+        passaro2.vetorY < cano.Y + cano.largura  
+    ) {
+        endgame();
+    }
+    if (
+        passaro2.vetorX + passaro2.largura > cano2.X &&   
+        passaro2.vetorX < cano2.X + cano2.altura &&       
+        passaro2.vetorY + passaro2.altura > cano2.Y && 
+        passaro2.vetorY < cano2.Y + cano2.largura  
+    ) {
+        endgame();
+    }
     //colisão com a caixa
-   if (passaro.x_mouse + passaro.largura > caixa.vetorX && passaro.x_mouse < caixa.vetorX + caixa.altura && passaro.vetorY + passaro.altura > caixa.vetorY && passaro.vetorY < caixa.vetorY + caixa.largura  
+   if (passaro.vetorX + passaro.largura > caixa.vetorX && passaro.vetorX < caixa.vetorX + caixa.altura && passaro.vetorY + passaro.altura > caixa.vetorY && passaro.vetorY < caixa.vetorY + caixa.largura  
     ) {
         let limiteX = Math.min(passaro.vetorX + passaro.largura - caixa.vetorX, caixa.vetorX + caixa.largura - passaro.vetorX) 
         let limiteY = Math.min(passaro.vetorY + passaro.altura - caixa.vetorY, caixa.vetorY + caixa.altura - passaro.vetorY) 
@@ -378,62 +434,22 @@ function animacao() {
              } 
             }
         poderes()
-        caixa.fundoCaixa = '../imagens/tijolo.png'
+        caixa.fundoCaixa = '../imagens/block.png'
 
     }
-
-    //colisão com cano vermelho
-   if (passaro.x_mouse + passaro.largura > red_cano.vetorX && passaro.x_mouse < red_cano.vetorX + red_cano.altura && passaro.vetorY + passaro.altura > red_cano.vetorY && passaro.vetorY < red_cano.vetorY + red_cano.largura  
-   ) {
-       let limiteX = Math.min(passaro.vetorX + passaro.largura - red_cano.vetorX, red_cano.vetorX + red_cano.largura - passaro.vetorX) 
-       let limiteY = Math.min(passaro.vetorY + passaro.altura - red_cano.vetorY, red_cano.vetorY + red_cano.altura - passaro.vetorY) 
-       passaro.pula()
-
-           if (limiteX > limiteY) { 
-               if (passaro.vetorX < red_cano.vetorX ){ 
-                   passaro.vetorX -= limiteX
-               }   
-               else{ 
-               passaro.vetorX += limiteX
-               } 
-           } 
-           else{ 
-               if (passaro.vetorY < red_cano.vetorY){ 
-                       passaro.vetorY -= limiteY
-               } 
-               else {
-                   passaro.vetorY += limiteY
-            } 
-           }
-   }
-   //colisão cano vermelho 2
-   if (passaro.x_mouse + passaro.largura > red_cano2.vetorX && passaro.x_mouse < red_cano2.vetorX + red_cano2.altura && passaro.vetorY + passaro.altura > red_cano2.vetorY && passaro.vetorY < red_cano2.vetorY + red_cano2.largura  
-   ) {
-       let limiteX = Math.min(passaro.vetorX + passaro.largura - red_cano2.vetorX, red_cano2.vetorX + red_cano2.largura - passaro.vetorX) 
-       let limiteY = Math.min(passaro.vetorY + passaro.altura - red_cano2.vetorY, red_cano2.vetorY + red_cano2.altura - passaro.vetorY) 
-       passaro.pula()
-
-           if (limiteX > limiteY) { 
-               if (passaro.vetorX < red_cano2.vetorX ){ 
-                   passaro.vetorX -= limiteX
-               }   
-               else{ 
-               passaro.vetorX += limiteX
-               } 
-           } 
-           else{ 
-               if (passaro.vetorY < red_cano2.vetorY){ 
-                       passaro.vetorY -= limiteY
-               } 
-               else {
-                   passaro.vetorY += limiteY
-            } 
-           }
-   }
-        if (passaro.x_mouse + passaro.largura > chefe.vetorX && 
-            passaro.x_mouse < chefe.vetorX + chefe.altura && 
+    //colisão com chefe passaro e passaro2
+    if (passaro.vetorX + passaro.largura > chefe.vetorX && 
+            passaro.vetorX < chefe.vetorX + chefe.altura && 
             passaro.vetorY + passaro.altura > chefe.vetorY && 
             passaro.vetorY < chefe.vetorY + chefe.largura  
+        ) {
+            endgame();
+        }
+
+    if (passaro2.vetorX + passaro2.largura > chefe.vetorX && 
+            passaro2.vetorX < chefe.vetorX + chefe.altura && 
+            passaro2.vetorY + passaro2.altura > chefe.vetorY && 
+            passaro2.vetorY < chefe.vetorY + chefe.largura  
         ) {
             endgame();
         }
@@ -487,6 +503,7 @@ function mudaCenario(){
 }
 
 function sonicPular(){
+    sonicJ.play()
     chefe.vetorX += chefe.condicao
     chefe.pulo = 1
     sonic = requestAnimationFrame(sonicPular)
@@ -496,18 +513,38 @@ function sonicPular(){
 document.addEventListener("keydown", function(event){
     if(event.code == 'Space')
     passaro2.pula()
+    audio2.play()
 })
 
-document.addEventListener('keypress', function(event){
-    if(event.code == "KeyA")
-    passaro2.vetorX -= 25
-    
-    if(event.code == "KeyD")
-    passaro2.vetorX += 25
+document.addEventListener("DOMContentLoaded", function(){
+	document.addEventListener("visibilitychange", function() {
+	  if( document.visibilityState == 'hidden'){
+	  	history.back()
+	  }
+	});
+});
 
-    if(event.code == "KeyW")
-    passaro2.vetorY -= 25
+//perdeu né, reinicia ai
+document.querySelector("#reiniciar").addEventListener('click', ()=>{window.location.reload()})
 
-    if(event.code == "KeyS")
-    passaro2.vetorY += 25
+document.addEventListener("keydown", function(evento){
+    if(evento.key == "Enter"){
+
+        window.location.reload()
+    }
 })
+
+function captarVolume(){
+    const parametroModo = new URLSearchParams(window.location.search)
+    const volumedados = parametroModo.get("dados")
+    volumeEfeitos(volumedados)
+}
+
+function volumeEfeitos(volumeModos){
+    audio.volume = volumeModos 
+    audio2.volume = volumeModos
+    sonicJ.volume = volumeModos
+    derrota.volume = volumeModos 
+}
+
+captarVolume()
